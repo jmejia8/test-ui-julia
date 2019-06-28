@@ -1,15 +1,20 @@
 using Blink
+using Plots
+plotly()
+
+
 
 function myfun(w, arg)
 
     println("perro")
     div_id = "box"
 
+    println("gato")
+
     @js_ w begin
         @var box = document.getElementById("box")
         box.style.background = box.style.background == "blue" ? "green" : "blue"
 
-        document.main()
     end
 
 end
@@ -24,6 +29,16 @@ function main()
     handle(w, "press") do args
         @show args
         myfun(w, 12)
+    end
+
+    # Set up julia to handle the "press" message:
+    handle(w, "press2") do args
+
+        println("hola desde 2")
+        @js_ w begin
+                @var box = document.getElementById("box2")
+                box.style.background = box.style.background == "blue" ? "green" : "blue"
+        end
     end
 
     title(w, "BCAP")
