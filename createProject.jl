@@ -33,17 +33,19 @@ function main()
     w = Window(async=false);
     load!(w, "materialize/js/materialize.js")
     load!(w, "materialize/css/materialize.min.css")
+    load!(w, "materialize/icons.css")
 
     body!(w, read("createProject.html", String))
 
 
 
     handle(w, "init") do args
-        println("perro")
+        println("Initializing...")
         init(w)
     end
 
     load!(w, "engine.js")
+    load!(w, "style.css")
 
     handle(w, "createProject") do args
         
@@ -56,7 +58,7 @@ function main()
 
             @js_ w begin
 
-                alert("Invalid infromation")
+                alert("Check Project Name.")
             end
         end
 

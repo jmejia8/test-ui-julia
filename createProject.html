@@ -9,10 +9,10 @@
 
 <div class="row">
     <div class="col s12">
-        <ul class="tabs">
+        <ul  class="tabs">
             <li class="tab col s3"><a class="active" href="#step1">General Settings</a></li>
             <li class="tab col s3"><a href="#step2">Target Algorithm</a></li>
-            <li class="tab col s3 disabled"><a href="#step3">Insistences</a></li>
+            <li class="tab col s3"><a href="#step3">Instances</a></li>
             <li class="tab col s3"><a href="#step4">Setup</a></li>
         </ul>
     </div>
@@ -22,9 +22,9 @@
 <!-- </header> -->
 
 <div class="container">
-    <h3>Create New Project</h3>
 
     <div id="step1" class="col s12">
+        <h3>Create New Project</h3>
         <form action="#">
             <div class="row">
                 <div class="input-field col s12">
@@ -56,12 +56,11 @@
 
             <div class="input-field col s12">
                 <div class="switch" style="margin-top: 20px;">
-                        Use the <span id="threads">1</span> available thread(s)?: 
                         <label>
-                            No
+                            Use the <span id="threads">1</span> available thread(s)?: 
                             <input type="checkbox" id="distributed">
                             <span class="lever"></span>
-                            Yes
+                            
                         </label>
                 </div>
             </div>
@@ -75,14 +74,133 @@
     </div>
 
 
-    <div id="step2">
+    <div id="step2" class="col s12">
+        <h3>Algorithm to be tuned</h3>
+        <form action="#">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="target-runner" type="text" class="validate">
+                    <label for="project-name">Target Algorithm Name</label>
+                    <span class="helper-text" data-error="wrong" data-success="right">e.g. Differential Evolution</span>
+                </div>
+            </div>
+
+            <div class="file-field input-field">
+                <div class="btn">
+                    <span>Select the Algorithm Program</span>
+                    <input type="file">
+                </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+              </div>
+            </div>
+
+            <div class="row">
+                <h4 class="form-h4">Parameters</h4>
+            </div>
+    
+            <div class="row">
+                 <div class="input-field col s12">
+                    <select>
+                      <option value="" disabled selected>--flag=value</option>
+                      <option value="1">--flag value</option>
+                      <option value="2">-flag=value</option>
+                      <option value="3">-flag value</option>
+                    </select>
+                    <label>Parameters Options</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <p>
+                    Command: <code style="background: #F3F3F3;padding: 3px;border-radius: 7px;"> eca --flag value </code>
+                </p>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="target-runner" type="number" name="quantity" min="1" max="100" step="1" onchange="gentable(this.value)">
+                    <label for="project-name">Number of Parameters:</label>
+                </div>
+            </div>
+
+        </form>
+
+        <div class="row">
+            
+        </div>
+
+        <div class="row">
+          <table class="striped">
+            <thead>
+              <tr>
+                  <th></th>
+                  <th>Parameter</th>
+                  <th>Flag</th>
+                  <th>Type</th>
+                  <th>Values</th>
+              </tr>
+            </thead>
+
+            <tbody id="tab-parms">
+            </tbody>
+          </table>
+        </div> 
         <div class="row">
             <p style="text-align: right;margin-top: 20px;">
-                <a class="waves-effect waves-light btn"  href="#step1" >Back</a>
+                <a class="waves-effect waves-light btn"  href="#step2" onclick="createProject();" >Continue</a>
                   
             </p>
         </div>
     </div>
+    <div id="step3" class="col s12">
+        <h3>Instances in a File</h3>
+        
+        <div class="row">
+            <div class="row">
+                <div class="col s12">
+                  Flag:
+                  <div class="input-field inline">
+                    <input type="text" value="--instance" class="validate">
+                    <!-- <label for="email_inline">--</label> -->
+                    <!-- <span class="helper-text" data-error="wrong" data-success="right">e.g. --instance</span> -->
+                  </div>
+                </div>
+          </div>
+            <div class="file-field input-field">
+                <div class="btn">
+                    <span>Select instances file</span>
+                    <input type="file">
+                </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+              </div>
+            </div>
+        </div>
+        <h4> or List Your Own Instances</h4>
+        <div class="row">
+            <div class="input-field col s12">
+                <div id="instances" class="chips"></div>
+                <span class="helper-text" data-error="wrong" data-success="right">Use enter to add a new one</span>
+            </div>
+
+        </div>
+            <p>
+                Preview: <code style="background: #F3F3F3;padding: 3px;border-radius: 7px;"> --instance </code>
+            </p>
+        <div class="row">
+            <p style="text-align: right;margin-top: 20px;">
+                <a class="waves-effect waves-light btn"  href="#step2" onclick="createProject();" >Continue</a>
+                  
+            </p>
+        </div>
+    </div>
+
+    <div id="step4" class="col s12">
+        <h3>Setup</h3>
+    </div>
+
+
 
 
 
