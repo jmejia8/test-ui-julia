@@ -122,6 +122,7 @@ function saveValues(){
         "instances": []
     };
 
+    Blink.msg("saveProject", project)
     console.log(project);
 
 }
