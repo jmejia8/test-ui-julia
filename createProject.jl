@@ -66,6 +66,10 @@ function main()
 
     end
 
+    handle(w, "saveProject") do args
+        display(args)
+    end
+
 end
 
 main()
