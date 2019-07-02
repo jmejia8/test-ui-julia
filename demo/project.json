@@ -1,0 +1,19 @@
+{
+    "project-name": "demo",
+    "target-algorithm-name": "",
+    "target-algorithm-src": "",
+    "target-algorithm-path": "",
+    "threads": 1,
+    "parameters": {
+        "prefix": "--",
+        "sep": " ",
+        "parameters": {
+            "flag": "value",
+            "type": "int",
+            "values": [1, 10]
+        }
+    },
+    "instance-flag": "--instance",
+    "instances-file": "",
+    "instances": []
+}
