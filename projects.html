@@ -1,10 +1,45 @@
-<div class="container">
-    <h3>Projects</h3>
-    <div class="collection">
-        <a href="#!" class="collection-item"><span class="badge">1</span>Differential Evolution</a>
-        <a href="#!" class="collection-item"><span class="new badge">4</span>PSO</a>
-        <a href="#!" class="collection-item">ECA</a>
-        <a href="#!" class="collection-item"><span class="badge">14</span>ABC</a>
+<!-- <header> -->
+<nav>
+    <div class="nav-wrapper">
+        <a href="#" class="brand-logo">Automated Parameter Tuning</a>
     </div>
+</nav>
+
+<div class="container">
+    <h3>My Projects</h3>
+      <table class="highlight">
+        <thead>
+            <tr>
+                <td><b>Project</b></td>
+                <td><b>Algorithm</b></td>
+                <td><b>Parameters</b></td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody id="my-projects">
+
+        </tbody>
+      </table>
+
+<!--     <div class="row">
+    </div> -->
             
 </div>
+
+
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-large red" onclick='Blink.msg("newProject", "init please...")'>
+        <i class="large material-icons">edit</i>
+    </a>
+</div>
+      
+
+<script>
+    Blink.msg("init", "init please...")
+    
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.fixed-action-btn');
+        var instances = M.FloatingActionButton.init(elems, options);
+    });
+</script>
