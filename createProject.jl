@@ -49,7 +49,7 @@ end
 
 
 
-function main()
+function main_createProject()
     w = Window(async=false);
     title(w, "New BCAP project")
     progress(w, 0.5)
@@ -104,10 +104,11 @@ function main()
                 end
             end
         end
-
-
     end
+
+
+
 
 end
 
-main()
+# main_createProject()
