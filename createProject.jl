@@ -30,7 +30,7 @@ function createProject(project_json)
 
 end
 
-function init(w)
+function createProject_init(w)
     n = Sys.CPU_THREADS
     txt = string("", n)
 
@@ -59,7 +59,7 @@ function main_createProject()
 
     handle(w, "init") do args
         println("Initializing...")
-        init(w)
+        createProject_init(w)
     end
 
     load!(w, "engine.js")

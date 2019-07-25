@@ -22,7 +22,7 @@ function jsonToHTML(json_name)
     
 end
 
-function init(w)
+function projects_init(w)
     myhomepath = joinpath( homedir(), ".bcap")
     projects_path = joinpath(myhomepath, "projects")
 
@@ -55,7 +55,7 @@ function main_projects()
 
     handle(w, "init") do args
         println("Initializing...")
-        init(w)
+        projects_init(w)
     end
 
     handle(w, "newProject") do args
