@@ -3,15 +3,10 @@ import JSON
 
 function createProject(project_json)
     myhomepath = joinpath( homedir(), ".bcap")
-    projectpath = joinpath(myhomepath, "projects")
+    projects_path = joinpath(myhomepath, "projects")
 
-    if !isdir(myhomepath)
-        try
-            mkdir(myhomepath)
-            mkdir(projectpath)
-        catch
-            return Dict("error" => true, "msg"=> "Error creating folder.")
-        end
+    if !check_home_directory(myhomepath, projects_path)
+        return Dict("error" => true, "msg"=> "Error creating folder.")
     end
 
     prj_name = string(project_json["project-name"], ".json")
@@ -19,7 +14,7 @@ function createProject(project_json)
         prj_name = replace(prj_name, s => "-")
     end
 
-    prj_name = joinpath(projectpath, prj_name)
+    prj_name = joinpath(projects_path, prj_name)
 
     if isfile(prj_name)
         return Dict("error" => true, "msg"=> "Existing Project.")

@@ -1,6 +1,7 @@
 using Blink
 import JSON
 
+include("utils.jl")
 include("createProject.jl")
 include("runProject.jl")
 
@@ -23,12 +24,14 @@ end
 
 function init(w)
     myhomepath = joinpath( homedir(), ".bcap")
-    projectpath = joinpath(myhomepath, "projects")
+    projects_path = joinpath(myhomepath, "projects")
+
+    check_home_directory(myhomepath, projects_path)
 
     str = ""
 
-    for fname in readdir(projectpath)
-        str = string(str, jsonToHTML(joinpath(projectpath, fname)))
+    for fname in readdir(projects_path)
+        str = string(str, jsonToHTML(joinpath(projects_path, fname)))
     end
 
     @js_ w begin
