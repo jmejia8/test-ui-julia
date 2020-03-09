@@ -13,7 +13,7 @@
                 <td><b>Project</b></td>
                 <td><b>Algorithm</b></td>
                 <td><b>Parameters</b></td>
-                <td></td>
+                <td><b>Actions</b></td>
             </tr>
         </thead>
         <tbody id="my-projects">
@@ -29,7 +29,7 @@
 
 <div class="fixed-action-btn">
     <a class="btn-floating btn-large red" onclick='Blink.msg("newProject", "init please...")'>
-        <i class="large material-icons">edit</i>
+        <i class="large material-icons">add</i>
     </a>
 </div>
       
@@ -42,4 +42,10 @@
         var elems = document.querySelectorAll('.fixed-action-btn');
         var instances = M.FloatingActionButton.init(elems, options);
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.tooltipped');
+        var instances = M.Tooltip.init(elems, options);
+    });
+
 </script>
