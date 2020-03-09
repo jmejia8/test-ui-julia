@@ -102,6 +102,51 @@ function main_createProject()
     end
 
 
+    handle(w, "chooseDirectory") do str
+        println("------------")
+
+        file = ""
+
+        try
+            file = replace(read(`zenity --directory --file-selection`, String), "\n" => "")
+        catch
+
+        end
+        @show(file)
+        if isdir(file)
+            @js_ w begin
+                document.getElementById($str).value = $file
+            end
+        else
+            @js_ w begin
+                alert("Error opening disrectory")
+            end
+        end
+    end
+
+    handle(w, "chooseFile") do str
+        println("------------")
+        file = ""
+
+        try
+            file = replace(read(`zenity --file-selection`, String), "\n" => "")
+        catch
+            
+        end        
+        @show(file)
+        
+        if isfile(file)
+            @js_ w begin
+                document.getElementById($str).value = $file
+            end
+        else
+            @js_ w begin
+                alert("Error opening file")
+            end
+        end
+    end
+
+
 
 
 end

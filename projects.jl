@@ -14,8 +14,9 @@ function jsonToHTML(json_name)
             <td>$(json["target-algorithm-name"])</td>
             <td>$(length(json["parameters"]["parameters"]))</td>
             <td>
-                <a class="waves-effect waves-light btn" onclick="Blink.msg('runProject', '$(json_name)')">Run</a>
-                <a class="waves-effect waves-light btn" onclick="Blink.msg('editProject', '$(json_name)')">Edit</a>
+                <a href="#" class="tooltipped" data-position="bottom" alt="Run project" onclick="Blink.msg('runProject', '$(json_name)')"><i class="small material-icons" style="color:#242D34;">play_circle_outline</i></a>
+                <a href="#" class="tooltipped" data-position="bottom" alt="Edit project" onclick="Blink.msg('editProject', '$(json_name)')"><i class="small material-icons" style="color:#242D34;">edit</i></a>
+                <a href="#" class="tooltipped" data-position="bottom" alt="Remove project" onclick="removeProject('$(json_name)', '$(json["project-name"])')"><i class="small material-icons" style="color:#D56969;">delete</i></a>
             </td>
           </tr>
     """; 
@@ -74,6 +75,33 @@ function main_projects()
             window.close()
         end
     end
+
+    handle(w, "removeProject") do json_name
+        println("Trying to remove: ", json_name)
+        removed = false
+        try
+            rm(json_name)
+            removed = true
+        catch
+            removed = false
+        end
+
+        if !removed
+            @js w begin
+                alert("Fail removing project")
+            end
+        else
+            main_projects()
+            @js w begin
+                window.close()
+            end
+        end
+
+
+
+        
+    end
+    
 
     load!(w, "engine.js")
     load!(w, "style.css")
