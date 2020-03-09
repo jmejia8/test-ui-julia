@@ -106,6 +106,8 @@ function saveValues(){
 
     var parameters = getParmsInfo();
 
+    var area = document.getElementById("instances-list");
+    var lines = area.value.replace(/\r\n/g,"\n").split("\n");
     var project = {
         "project-name":          getById('project-name').value,
         "target-algorithm-src":  runner,
@@ -118,11 +120,42 @@ function saveValues(){
             "parameters": parameters
         },
         "instance-flag":  getById('instance-flag').value,
-        "instances-file": getById('instances-file').value,
-        "instances": []
+        "instances-path": getById('instance-path').value,
+        "instances-file": getById('instance-file').value,
+        "instances": lines
     };
 
     Blink.msg("saveProject", project)
     console.log(project);
 
+}
+
+function removeProject(json_name, str){
+
+    confirm("Remove project "  + str + "?") ? Blink.msg('removeProject', json_name) : 0;
+}
+
+function chooseTargetProgram(){
+    Blink.msg('chooseTargetProgram', "json_name");
+}
+
+function chooseFile(str){
+    Blink.msg('chooseFile', str);
+
+}
+
+function chooseDirectory(str){
+    Blink.msg('chooseDirectory', str);
+
+}
+
+function updateCMDExample(item_id, items){
+    var txt = "";
+    for (var i = 0; i < items.length; i++) {
+        var item = getById(items[i]);
+        txt += " " + item.value;
+    }
+
+    var v = getById(item_id);
+    v.innerHTML = txt;
 }
