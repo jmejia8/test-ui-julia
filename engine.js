@@ -151,9 +151,14 @@ function chooseDirectory(str){
 
 function updateCMDExample(item_id, items){
     var txt = "";
+    var fls  = ["--flag=value","--flag value","-flag=value","-flag value"] 
     for (var i = 0; i < items.length; i++) {
         var item = getById(items[i]);
-        txt += " " + item.value;
+        var aux = item.value;
+        if (items[i] == "parameters-meta" ) {
+            aux = fls[parseInt(aux)];
+        }
+        txt += " " + aux;
     }
 
     var v = getById(item_id);
