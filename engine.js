@@ -98,6 +98,7 @@ function getParmsInfo(){
 
 
 function saveValues(){
+    // getById("save-loader").style.display = "inline-block";
     var runner = document.querySelector('input[name="target-runner"]:checked').value;
     var parm_conf = getById('parameters-meta').value;
 
@@ -200,6 +201,8 @@ function projectToHTML(json){
         getById("parm-values-" + i).value = parameters[i]["values"];
     }
 
+    M.updateTextFields();
+
     // var runner = document.querySelector('input[name="target-runner"]:checked').value;
 
     // var parameters = getParmsInfo();
@@ -213,4 +216,25 @@ function projectToHTML(json){
     //     },
     //     "instances": lines
     // };
+}
+
+
+function goto(str){
+    if (str == "projects") {
+        Blink.msg('gotoProjects', str);
+    }
+}
+
+function nextTab(i){
+    var tabs = getById("tabs");
+    var instance = M.Tabs.getInstance(tabs);
+    var str = "step" + (instance.index + 1 + i);
+    console.log(str);
+    instance.select(str);
+
+    if (instance.index < 1) {
+        getById("back-btn").style.display = "none";
+    }else{
+        getById("back-btn").style.display = "inline-block";
+    }
 }
