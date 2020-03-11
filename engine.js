@@ -37,9 +37,9 @@ function genrow(i){
     '<td>' + //
         '<div class="input-field col s12">' + //
             '<select id="parm-type-'+ i +'">' + //
-              '<option value="float" selected>Float</option>' + //
+              '<option value="float" >Float</option>' + //
               '<option value="int">Integer</option>' + //
-              '<option value="cate" selected>Categorical</option>' + //
+              '<option value="cate" >Categorical</option>' + //
               '<option value="bool">Boolean</option>' + //
             '</select>' + //
             '<label>Type</label>' + //
@@ -163,4 +163,54 @@ function updateCMDExample(item_id, items){
 
     var v = getById(item_id);
     v.innerHTML = txt;
+}
+
+function projectToHTML(json){
+    console.log(json);
+    console.log(json["project-name"]);
+    getById('project-name').value = json["project-name"];
+    getById('target-algorithm-name').value = json["target-algorithm-name"];
+    getById('target-algorithm-path').value = json["target-algorithm-path"];
+    getById('distributed').value = json["threads"];
+    getById('instance-flag').value = json["instance-flag"];
+    getById('instance-path').value = json["instances-path"];
+    getById('instance-file').value = json["instances-file"];
+    getById("instances-list").value = json["instances"].join("\n");
+
+    var n = 0;
+    if (json["parameters"]["prefix"] == "--" && json["parameters"]["sep"] == " ") {
+        n = 1;
+    }else if (json["parameters"]["prefix"] == "-" && json["parameters"]["sep"] == "=") {
+        n = 2;
+    }else if (json["parameters"]["prefix"] == "-" && json["parameters"]["sep"] == " ") {
+        n = 3;
+    }
+    
+    getById('parameters-meta').value = String(n);
+
+
+    var parameters = json["parameters"]["parameters"];
+    n = parameters.length;
+    getById("number-of-parameters").value = String(n);
+    gentable(n);
+    for (var i = 0; i < n; i++) {
+        getById("parm-name-" + i).value = parameters[i]["name"];
+        getById("parm-flag-" + i).value = parameters[i]["flag"];
+        getById("parm-type-" + i).value = parameters[i]["type"];
+        getById("parm-values-" + i).value = parameters[i]["values"];
+    }
+
+    // var runner = document.querySelector('input[name="target-runner"]:checked').value;
+
+    // var parameters = getParmsInfo();
+
+    // var area = document.getElementById("instances-list");
+    // var lines = area.value.replace(/\r\n/g,"\n").split("\n");
+    // var project = {
+    //     "target-algorithm-src":  runner,
+    //     "parameters": {
+    //         "parameters": parameters
+    //     },
+    //     "instances": lines
+    // };
 }
