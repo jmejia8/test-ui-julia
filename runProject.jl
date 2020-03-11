@@ -165,7 +165,6 @@ function staringBCAP(w, json, BCAP_meta)
 
     LL_optimizer(Φ,problem,status,information,options,t) = lower_level_optimizer(Φ,problem,status,information,options,t; parameters = BCAP_parms)
 
-    @info("Running BCAP...")
     method = Algorithm(BCAP_parms;
                 initialize! = initialize!,
                 update_state! = update_state!,
@@ -181,6 +180,7 @@ function staringBCAP(w, json, BCAP_meta)
 end
 
 function configuring(w, json, BCAP_meta)
+    @info("Running BCAP...")
     results = Bilevel.optimize(F, f, BCAP_meta["bounds"], BCAP_meta["bounds"], BCAP_meta["method"])
 end
 
