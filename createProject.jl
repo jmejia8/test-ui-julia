@@ -1,12 +1,12 @@
 using Blink
 import JSON
 
-function createProject(project_json)
+function createProject(project_json, overwrite=false)
     myhomepath = joinpath( homedir(), ".bcap")
     projects_path = joinpath(myhomepath, "projects")
 
     if !check_home_directory(myhomepath, projects_path)
-        return Dict("error" => true, "msg"=> "Error creating folder.")
+        return Dict("error" => true, "msg"=> "Error creating folder.", "code" => 0)
     end
 
     prj_name = string(project_json["project-name"], ".json")
@@ -16,8 +16,8 @@ function createProject(project_json)
 
     prj_name = joinpath(projects_path, prj_name)
 
-    if isfile(prj_name)
-        return Dict("error" => true, "msg"=> "Existing Project.")
+    if !overwrite &&  isfile(prj_name)
+        return Dict("error" => true, "msg"=> "Existing Project.", "code" => 1)
     end
 
 
@@ -26,11 +26,11 @@ function createProject(project_json)
     end
 
     display(project_json)
-    return Dict("error" => false, "msg" => "Project saved.")
+    return Dict("error" => false, "msg" => "Project saved.", "code" => 2)
 
 end
 
-function createProject_init(w)
+function createProject_init(w, json_name)
     n = Sys.CPU_THREADS
     txt = string("", n)
 
@@ -40,11 +40,23 @@ function createProject_init(w)
 
         tr.innerHTML = $txt
     end
+
+
+    # ============
+    if !isnothing(json_name) && isfile(json_name)
+        editProject(w, json_name)
+    end
 end
 
+function editProject(w, json_name)
+    json = JSON.parsefile(json_name)
+    println("editProject")
+    @js_ w begin
+        projectToHTML($json)
+    end
+end
 
-
-function main_createProject()
+function main_createProject(json_name  = nothing)
     w = Window(async=false);
     title(w, "New BCAP project")
     progress(w, 0.5)
@@ -59,7 +71,7 @@ function main_createProject()
 
     handle(w, "init") do args
         println("Initializing...")
-        createProject_init(w)
+        createProject_init(w, json_name)
     end
 
     load!(w, "engine.js")
@@ -84,7 +96,7 @@ function main_createProject()
     end
 
     handle(w, "saveProject") do project_json
-        res = createProject(project_json)
+        res = createProject(project_json, !isnothing(json_name))
         display(res)
         if res["error"]
             msg = res["msg"]
@@ -93,11 +105,11 @@ function main_createProject()
             end
         else
             @js_ w begin
-                @var r = confirm("Start tuning?");
-                if r
-                    window.close()                    
-                end
+                alert("Project saved!");
+                window.close()
             end
+            sleep(3)
+            main_projects()
         end
     end
 
