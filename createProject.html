@@ -1,15 +1,18 @@
 <!-- <header> -->
-  <nav>
-    <div class="nav-wrapper">
-      <a href="#" class="brand-logo">Automated Parameter Tuning</a>
-    </div>
-  </nav>
+<nav>
+<div class="nav-wrapper grey darken-3">
+  <ul class="left">
+    <li><a href="#!" onclick="goto('projects')"><i class="material-icons">arrow_back</i></a></li>
+  </ul>
+  <a href="#!"  class="brand-logo"><i class="material-icons">blur_on</i>Parameter Tuning</a>
+</div>
+</nav>
 
 
 
 <div class="row">
-    <div class="col s12">
-        <ul  class="tabs">
+    <div class="col s12 ">
+        <ul  class="tabs" id="tabs">
             <li class="tab col s3"><a class="active" href="#step1">General Settings</a></li>
             <li class="tab col s3"><a href="#step2">Target Algorithm</a></li>
             <li class="tab col s3"><a href="#step3">Instances</a></li>
@@ -209,17 +212,25 @@
     <div id="step4" class="col s12">
         <h3>Summary</h3>
         <div class="row">
-            <p style="text-align: right;margin-top: 20px;">
-                <a class="waves-effect waves-light btn"  href="#step2" onclick="saveValues();" >Save and Run</a>
-                  
-            </p>
+            <div style="text-align: right;margin-top: 20px;" id="save-btn-wrap">
+                <button class="waves-effect waves-light btn" href="#step2" id="save-btn" onclick="saveValues();" >Save and Run</button>
+                
+            </div>
         </div>
     </div>
 
 
 
 
+</div>
 
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-large grey" id="back-btn" style="display: none;" onclick='nextTab(-1)'>
+        <i class="large material-icons">navigate_before</i>
+    </a>
+    <a class="btn-floating btn-large grey" onclick='nextTab(1)'>
+        <i class="large material-icons">navigate_next</i>
+    </a>
 </div>
 
 
@@ -227,6 +238,11 @@
     Blink.msg("init", "init please...")
     M.AutoInit();
 
-    var instance = M.Tabs.getInstance(".tabs");
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.fixed-action-btn');
+        // var instances = M.FloatingActionButton.init(elems, options);
+    });
+
       
 </script>

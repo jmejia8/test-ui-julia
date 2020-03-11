@@ -102,14 +102,20 @@ function main_createProject(json_name  = nothing)
             msg = res["msg"]
             @js_ w begin
                 alert($msg)
+                getById("save-btn").disabled = false;
+                getById("save-btn").innerHTML = "Retry";
             end
         else
             @js_ w begin
-                alert("Project saved!");
-                window.close()
+                getById("save-btn").disabled = true;
+                getById("save-btn").innerHTML = "Project saved!";
             end
-            sleep(3)
-            main_projects()
+            sleep(5)
+            @js_ w begin
+                getById("save-btn").disabled = false;
+                getById("save-btn").innerHTML = "Save project";
+            end
+            # main_projects()
         end
     end
 
@@ -133,6 +139,13 @@ function main_createProject(json_name  = nothing)
             @js_ w begin
                 alert("Error opening disrectory")
             end
+        end
+    end
+
+    handle(w, "gotoProjects") do str
+        main_projects()
+        @js_ w begin
+            window.close()
         end
     end
 
