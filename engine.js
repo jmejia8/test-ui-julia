@@ -109,6 +109,9 @@ function saveValues(){
 
     var area = document.getElementById("instances-list");
     var lines = area.value.replace(/\r\n/g,"\n").split("\n");
+    lines = lines.filter(function (el) {
+      return el != "";
+    });
     var project = {
         "project-name":          getById('project-name').value,
         "target-algorithm-src":  runner,

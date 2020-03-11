@@ -155,7 +155,7 @@ function staringBCAP(w, json, BCAP_meta)
                         )
 
     options = Bilevel.Options(F_calls_limit=Inf,
-                        f_calls_limit=50*length(benchmark),
+                        f_calls_limit=500*length(benchmark),
                         F_tol=1e-5,
                         f_tol=1e-5,
                         store_convergence=false,
@@ -165,9 +165,24 @@ function staringBCAP(w, json, BCAP_meta)
 
     LL_optimizer(Φ,problem,status,information,options,t) = lower_level_optimizer(Φ,problem,status,information,options,t; parameters = BCAP_parms)
 
+    update_state_w!(args...; w = w, json = json) = begin
+        status = args[4]
+        txt = ""
+        for i = 1:length(status.best_sol.x)
+            txt *= json["parameters"]["parameters"][i]["name"] * ": " * string.(status.best_sol.x[i])
+            txt *= " "
+        end
+        txt *= "\n"
+        @js_ w begin
+            document.getElementById("stdout").innerHTML += $txt;
+        end
+        
+        update_state!(args...)
+    end
+
     method = Algorithm(BCAP_parms;
                 initialize! = initialize!,
-                update_state! = update_state!,
+                update_state! = update_state_w!,
                 final_stage! = final_stage!,
                 lower_level_optimizer = LL_optimizer,
                 is_better = is_better,
