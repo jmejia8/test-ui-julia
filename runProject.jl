@@ -1,5 +1,5 @@
 import CSV
-include("/home/jmejia/develop/repos/bca-parameter/BCAP.jl")
+include("/home/jesus/develop/repos/bca-parameter/BCAP.jl")
 
 function init(w)
     

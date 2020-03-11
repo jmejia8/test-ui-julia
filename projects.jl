@@ -76,6 +76,14 @@ function main_projects()
         end
     end
 
+    handle(w, "editProject") do json_name
+
+        main_createProject(json_name)
+        @js w begin
+            window.close()
+        end
+    end
+
     handle(w, "removeProject") do json_name
         println("Trying to remove: ", json_name)
         removed = false
