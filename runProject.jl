@@ -1,4 +1,6 @@
 import CSV
+import Printf.@sprintf
+
 include("/home/jesus/develop/repos/bca-parameter/BCAP.jl")
 
 function init(w)
@@ -133,6 +135,21 @@ function loadInstances(w, json, BCAP_meta)
 
 end
 
+function sendInfoToUI(w, status, json)
+    header_txt = map( str -> "<th>" * string(str["name"]) * "</th>", json["parameters"]["parameters"])
+    body_txt = map( v -> "<td>" * string(v) * "</td>", status.best_sol.x)
+
+    html_head = "<th>Iteration</th>" * prod(header_txt) * "<th>Instances Solved</th>" * "<th>Cost</th>"
+    html_body = string("<td>" , status.iteration ,  "</td>") * prod(body_txt) * string("<td>", Int(sum(status.best_sol.y[:y] .== 0)), "</td>")
+    html_body *= string("<td>", @sprintf("%.3e",status.best_sol.F) , "</td>")
+
+    @js_ w begin
+        document.getElementById("table-results-head").innerHTML = $html_head;
+        document.getElementById("table-results-body").innerHTML += $html_body;
+    end
+end
+
+
 function staringBCAP(w, json, BCAP_meta)
     bounds,parmstype, targetAlgorithm = getTargetAlgorithm_CMD(json)
     benchmark = BCAP_meta["instances"]
@@ -155,7 +172,7 @@ function staringBCAP(w, json, BCAP_meta)
                         )
 
     options = Bilevel.Options(F_calls_limit=Inf,
-                        f_calls_limit=500*length(benchmark),
+                        f_calls_limit=50*length(benchmark),
                         F_tol=1e-5,
                         f_tol=1e-5,
                         store_convergence=false,
@@ -167,23 +184,25 @@ function staringBCAP(w, json, BCAP_meta)
 
     update_state_w!(args...; w = w, json = json) = begin
         status = args[4]
-        txt = ""
-        for i = 1:length(status.best_sol.x)
-            txt *= json["parameters"]["parameters"][i]["name"] * ": " * string.(status.best_sol.x[i])
-            txt *= " "
-        end
-        txt *= "\n"
-        @js_ w begin
-            document.getElementById("stdout").innerHTML += $txt;
-        end
+        sendInfoToUI(w, status, json)
         
         update_state!(args...)
+    end
+
+    final_stage_w!(args...; w = w, json = json) = begin
+        final_stage!(args...)
+        @js_ w begin
+            console.log("asdfaf");
+            document.getElementById("progress-container").style.display = "none";
+        end
+        println("finalll")
+
     end
 
     method = Algorithm(BCAP_parms;
                 initialize! = initialize!,
                 update_state! = update_state_w!,
-                final_stage! = final_stage!,
+                final_stage! = final_stage_w!,
                 lower_level_optimizer = LL_optimizer,
                 is_better = is_better,
                 stop_criteria = stop_criteria,
