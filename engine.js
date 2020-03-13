@@ -118,6 +118,7 @@ function saveValues(){
         "target-algorithm-name": getById('target-algorithm-name').value,
         "target-algorithm-path": getById('target-algorithm-path').value,
         "threads":               getById('distributed').value,
+        "target-runner-calls":   Math.max(1, parseInt(getById('number-of-calls').value)),
         "parameters": {
             "prefix": parm_prefix,
             "sep":    parm_sep,
@@ -180,6 +181,7 @@ function projectToHTML(json){
     getById('instance-path').value = json["instances-path"];
     getById('instance-file').value = json["instances-file"];
     getById("instances-list").value = json["instances"].join("\n");
+    getById('number-of-calls').value = json["target-runner-calls"];
 
     var n = 0;
     if (json["parameters"]["prefix"] == "--" && json["parameters"]["sep"] == " ") {
@@ -204,7 +206,7 @@ function projectToHTML(json){
         getById("parm-values-" + i).value = parameters[i]["values"];
     }
 
-    M.updateTextFields();
+    
 
     // var runner = document.querySelector('input[name="target-runner"]:checked').value;
 

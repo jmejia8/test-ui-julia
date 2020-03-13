@@ -172,7 +172,7 @@ function staringBCAP(w, json, BCAP_meta)
                         )
 
     options = Bilevel.Options(F_calls_limit=Inf,
-                        f_calls_limit=50*length(benchmark),
+                        f_calls_limit=json["target-runner-calls"]*length(benchmark),
                         F_tol=1e-5,
                         f_tol=1e-5,
                         store_convergence=false,
@@ -191,11 +191,12 @@ function staringBCAP(w, json, BCAP_meta)
 
     final_stage_w!(args...; w = w, json = json) = begin
         final_stage!(args...)
+        status = args[1]
+        sendInfoToUI(w, status, json)
         @js_ w begin
-            console.log("asdfaf");
             document.getElementById("progress-container").style.display = "none";
         end
-        println("finalll")
+        println("done!")
 
     end
 
