@@ -217,10 +217,31 @@ end
 function configuring(w, json, BCAP_meta)
     @info("Running BCAP...")
     results = Bilevel.optimize(F, f, BCAP_meta["bounds"], BCAP_meta["bounds"], BCAP_meta["method"])
+    BCAP_meta["status"] = results
 end
 
 function finishing(w, json, BCAP_meta)
-    sleep(2)
+    status = BCAP_meta["status"]
+    best = status.best_sol
+    
+
+    @js_ w begin
+        document.getElementById("solved-instances").innerHTML = $(status.best_sol.f)
+        document.getElementById("num-instances").innerHTML = $(length(status.best_sol.y[:ids]))
+    end
+
+    header_txt = map( str -> "<th>" * string(str["name"]) * "</th>", json["parameters"]["parameters"])
+    body_txt = map( v -> "<td>" * string(v) * "</td>", status.best_sol.x)
+
+    html_head = prod(header_txt)
+    html_body = prod(body_txt) 
+
+    
+    @js_ w begin
+        document.getElementById("table-best-results-head").innerHTML = $html_head;
+        document.getElementById("table-best-results-body").innerHTML += $html_body;
+    end
+
 end
 
 
