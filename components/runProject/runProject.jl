@@ -1,10 +1,7 @@
-import CSV
-import Printf.@sprintf
 
-include("/home/jesus/develop/repos/bca-parameter/BCAP.jl")
 
-function init(w)
-    
+function init_run(w)
+
 end
 
 @everywhere function shell_target(Φ, instance, seed=0; exe = "", flags = String[], seed_flag="--seed")
@@ -17,7 +14,7 @@ end
     exe_name = exe
     settings = (flags .* vals)
     instance_str = instance[:instance]
-    
+
     cmd = string(exe_name, " ", prod(settings), instance_str, " ", seed_flag, " ", string(seed))
     cmd  = split(cmd)
 
@@ -43,7 +40,7 @@ end
     end
 
     return fx
-    
+
 end
 
 function getTargetAlgorithm_CMD(json)
@@ -85,11 +82,12 @@ function getTargetAlgorithm_CMD(json)
 end
 
 function loadInstances(w, json, BCAP_meta)
+    @info "loadInstances"
     my_instances = nothing
     if !isempty(json["instances-file"])
         fname = joinpath(json["instances-path"], json["instances-file"])
     elseif !isempty(json["instances"])
-        txt = "instance,optim\n" 
+        txt = "instance,optim\n"
         for instance in json["instances"]
             v = split(instance, ",")
             if length(v) >= 2
@@ -111,7 +109,7 @@ function loadInstances(w, json, BCAP_meta)
         end
         error("No instances were provided")
     end
-    
+
     if !isfile(fname)
         txt = "Error: cannot open file $fname"
         @js_ w begin
@@ -150,7 +148,8 @@ function sendInfoToUI(w, status, json)
 end
 
 
-function staringBCAP(w, json, BCAP_meta)
+function startingBCAP(w, json, BCAP_meta)
+    @info "startingBCAP"
     bounds,parmstype, targetAlgorithm = getTargetAlgorithm_CMD(json)
     benchmark = BCAP_meta["instances"]
 
@@ -185,7 +184,7 @@ function staringBCAP(w, json, BCAP_meta)
     update_state_w!(args...; w = w, json = json) = begin
         status = args[4]
         sendInfoToUI(w, status, json)
-        
+
         update_state!(args...)
     end
 
@@ -221,9 +220,10 @@ function configuring(w, json, BCAP_meta)
 end
 
 function finishing(w, json, BCAP_meta)
+    @info "finishing"
     status = BCAP_meta["status"]
     best = status.best_sol
-    
+
 
     @js_ w begin
         document.getElementById("solved-instances").innerHTML = $(status.best_sol.f)
@@ -234,9 +234,9 @@ function finishing(w, json, BCAP_meta)
     body_txt = map( v -> "<td>" * string(v) * "</td>", status.best_sol.x)
 
     html_head = prod(header_txt)
-    html_body = prod(body_txt) 
+    html_body = prod(body_txt)
 
-    
+
     @js_ w begin
         document.getElementById("table-best-results-head").innerHTML = $html_head;
         document.getElementById("table-best-results-body").innerHTML += $html_body;
@@ -249,11 +249,11 @@ function main_runProject(json_name)
     w = Window(async=false);
     title(w, "My Projects")
 
-    load!(w, "materialize/js/materialize.js")
-    load!(w, "materialize/css/materialize.min.css")
-    load!(w, "materialize/icons.css")
+    load!(w, "assets/materialize/js/materialize.js")
+    load!(w, "assets/materialize/css/materialize.min.css")
+    load!(w, "assets/materialize/icons.css")
 
-    body!(w, read("runProject.html", String))
+    body!(w, read("components/runProject/runProject.html", String))
 
     load!(w, "engine.js")
     load!(w, "style.css")
@@ -262,7 +262,7 @@ function main_runProject(json_name)
 
     handle(w, "init") do args
         println("Initializing...")
-        init(w)
+        init_run(w)
 
         json = JSON.parsefile(json_name)
 
@@ -271,7 +271,7 @@ function main_runProject(json_name)
             document.getElementById("sub-title").innerHTML = $(json["target-algorithm-name"])
         end
 
-        project_steps = [ loadInstances, staringBCAP, configuring, finishing ]
+        project_steps = [ loadInstances, startingBCAP, configuring, finishing ]
 
         BCAP_meta = Dict()
 
@@ -286,9 +286,8 @@ function main_runProject(json_name)
                 document.getElementById("progress").style = $txt
                 document.getElementById($t).innerHTML = "Done!"
             end
-            
+
         end
     end
 
 end
-

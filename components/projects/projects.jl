@@ -1,10 +1,3 @@
-using Blink
-import JSON
-
-include("utils.jl")
-include("createProject.jl")
-include("runProject.jl")
-
 function jsonToHTML(json_name)
     json = JSON.parsefile(json_name)
 
@@ -19,8 +12,8 @@ function jsonToHTML(json_name)
                 <a href="#" class="tooltipped" data-position="bottom" alt="Remove project" onclick="removeProject('$(json_name)', '$(json["project-name"])')"><i class="small material-icons" style="color:#D56969;">delete</i></a>
             </td>
           </tr>
-    """; 
-    
+    """;
+
 end
 
 function projects_init(w)
@@ -37,7 +30,7 @@ function projects_init(w)
 
     @js_ w begin
         @var box = document.getElementById("my-projects")
-        
+
         box.innerHTML = $str
     end
 end
@@ -46,11 +39,11 @@ function main_projects()
     w = Window(async=false);
     title(w, "My Projects")
 
-    load!(w, "materialize/js/materialize.js")
-    load!(w, "materialize/css/materialize.min.css")
-    load!(w, "materialize/icons.css")
+    load!(w, "assets/materialize/js/materialize.js")
+    load!(w, "assets/materialize/css/materialize.min.css")
+    load!(w, "assets/materialize/icons.css")
 
-    body!(w, read("projects.html", String))
+    body!(w, read("components/projects/projects.html", String))
 
 
 
@@ -107,13 +100,11 @@ function main_projects()
 
 
 
-        
+
     end
-    
+
 
     load!(w, "engine.js")
     load!(w, "style.css")
 
 end
-
-main_projects()

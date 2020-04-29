@@ -1,6 +1,3 @@
-using Blink
-import JSON
-
 function createProject(project_json, overwrite=false)
     myhomepath = joinpath( homedir(), ".bcap")
     projects_path = joinpath(myhomepath, "projects")
@@ -21,7 +18,7 @@ function createProject(project_json, overwrite=false)
     end
 
 
-    open(prj_name,"w") do f 
+    open(prj_name,"w") do f
         JSON.print(f, project_json)
     end
 
@@ -61,11 +58,11 @@ function main_createProject(json_name  = nothing)
     title(w, "New BCAP project")
     progress(w, 0.5)
 
-    load!(w, "materialize/js/materialize.js")
-    load!(w, "materialize/css/materialize.min.css")
-    load!(w, "materialize/icons.css")
+    load!(w, "assets/materialize/js/materialize.js")
+    load!(w, "assets/materialize/css/materialize.min.css")
+    load!(w, "assets/materialize/icons.css")
 
-    body!(w, read("createProject.html", String))
+    body!(w, read("components/createProject/createProject.html", String))
 
 
 
@@ -78,10 +75,10 @@ function main_createProject(json_name  = nothing)
     load!(w, "style.css")
 
     handle(w, "createProject") do args
-        
+
         if length(args) != 3
             @error "Error"
-            return 
+            return
         end
 
         if !createProject(args...)
@@ -156,10 +153,10 @@ function main_createProject(json_name  = nothing)
         try
             file = replace(read(`zenity --file-selection`, String), "\n" => "")
         catch
-            
-        end        
+
+        end
         @show(file)
-        
+
         if isfile(file)
             @js_ w begin
                 document.getElementById($str).value = $file
