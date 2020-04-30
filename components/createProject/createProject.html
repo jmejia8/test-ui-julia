@@ -21,7 +21,7 @@
     </div>
 </div>
 
-  
+
 <!-- </header> -->
 
 <div class="container">
@@ -46,31 +46,31 @@
             <p>
                 <label>
                     <input class="with-gap" name="target-runner" value="repl" type="radio"  />
-                    <span>Python, Julia, R,...</span>
+                    <span>Julia</span>
                 </label>
             </p>
 
-            <p>
+            <!-- <p>
                 <label>
                     <input class="with-gap" name="target-runner" value="java" type="radio"  />
                     <span>Java</span>
                 </label>
-            </p>
+            </p> -->
 
             <div class="input-field col s12">
                 <div class="switch" style="margin-top: 20px;">
                         <label>
-                            Use the <span id="threads">1</span> available thread(s)?: 
+                            Use the <span id="threads">1</span> available thread(s)?:
                             <input type="checkbox" id="distributed">
                             <span class="lever"></span>
-                            
+
                         </label>
                 </div>
             </div>
             <div class="row">
                 <p style="text-align: right;margin-top: 20px;">
                     <!-- <a class="waves-effect waves-light btn"  href="#step2" onclick="createProject();" >Continue</a> -->
-                      
+
                 </p>
             </div>
         <!-- </form> -->
@@ -98,7 +98,7 @@
             <div class="row">
                 <h4 class="form-h4">Parameters</h4>
             </div>
-    
+
             <div class="row">
                  <div class="input-field col s12">
                     <select id="parameters-meta" onchange="updateCMDExample('cmd-example', ['target-algorithm-path', 'parameters-meta'])">
@@ -127,7 +127,7 @@
         <!-- </form> -->
 
         <div class="row">
-            
+
         </div>
 
         <div class="row">
@@ -145,17 +145,17 @@
             <tbody id="tab-parms">
             </tbody>
           </table>
-        </div> 
+        </div>
         <div class="row">
             <p style="text-align: right;margin-top: 20px;">
                 <!-- <a class="waves-effect waves-light btn"  href="#step2" onclick="createProject();" >Continue</a> -->
-                  
+
             </p>
         </div>
     </div>
     <div id="step3" class="col s12">
         <h3>Configure the Instances</h3>
-        
+
         <div class="row">
             <div class="row">
                 <div class="col s12">
@@ -197,14 +197,14 @@
               </div>
             </form>
           </div>
-        
+
             <p>
                 Preview: <code style="background: #F3F3F3;padding: 3px;border-radius: 7px;" id="cmd-instance"> --instance </code>
             </p>
         <div class="row">
             <p style="text-align: right;margin-top: 20px;">
                 <!-- <a class="waves-effect waves-light btn"  href="#step2" onclick="createProject();" >Continue</a> -->
-                  
+
             </p>
         </div>
 
@@ -224,7 +224,7 @@
         <div class="row">
             <div style="text-align: right;margin-top: 20px;" id="save-btn-wrap">
                 <button class="waves-effect waves-light btn" href="#step2" id="save-btn" onclick="saveValues();" >Save and Run</button>
-                
+
             </div>
         </div>
     </div>
@@ -255,5 +255,5 @@
         // var instances = M.FloatingActionButton.init(elems, options);
     });
 
-      
+
 </script>

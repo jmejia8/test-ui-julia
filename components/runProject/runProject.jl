@@ -29,19 +29,37 @@ end
     end
 
     if haskey(instance, :optim) && instance[:optim] >= 0
-        o = fx - instance[:optim]
-        if o < 0
-            println("Check instance ")
-            display(instance)
-            error("Ill-posed benchmark")
-            return 0
+        if fx <= instance[:optim]
+            return 0.0
         end
-        fx = o
+        return fx
     end
 
     return fx
 
 end
+
+
+@everywhere function repl_target(Φ, instance, seed=0; src_path = nothing)
+    if isnothing(src_path) || !isfile(src_path)
+        error("Choose a valid julia file")
+        return NaN
+    end
+
+    ff = include(src_path)
+    fx = ff(Φ, instance, seed)
+
+    if haskey(instance, :optim) && instance[:optim] >= 0
+        if fx <= instance[:optim]
+            return 0.0
+        end
+        return fx
+    end
+
+    return fx
+
+end
+
 
 function getTargetAlgorithm_CMD(json)
     bounds = zeros(2, length(json["parameters"]["parameters"]))
@@ -72,11 +90,17 @@ function getTargetAlgorithm_CMD(json)
     end
 
 
-    targetAlgorithm(Φ, instance, seed = 0) = shell_target(Φ, instance, seed;
-        exe = json["target-algorithm-path"],
-        flags = flags,
-        seed_flag="--seed")
+    targetAlgorithm(Φ, instance, seed = 0) = begin
 
+        if json["target-algorithm-src"] != "repl"
+            return shell_target(Φ, instance, seed;
+            exe = json["target-algorithm-path"],
+            flags = flags,
+            seed_flag="--seed")
+        else
+            return repl_target(Φ, instance, seed; src_path=json["target-algorithm-path"])
+        end
+    end
 
     return bounds,parmstype, targetAlgorithm
 end
@@ -138,7 +162,7 @@ function sendInfoToUI(w, status, json)
     body_txt = map( v -> "<td>" * string(v) * "</td>", status.best_sol.x)
 
     html_head = "<th>Iteration</th>" * prod(header_txt) * "<th>Instances Solved</th>" * "<th>Cost</th>"
-    html_body = string("<td>" , status.iteration ,  "</td>") * prod(body_txt) * string("<td>", Int(sum(status.best_sol.y[:y] .== 0)), "</td>")
+    html_body = string("<td>" , status.iteration ,  "</td>") * prod(body_txt) * string("<td>", Int(sum(status.best_sol.y[:y] .== 0.0)), "</td>")
     html_body *= string("<td>", @sprintf("%.3e",status.best_sol.F) , "</td>")
 
     @js_ w begin
